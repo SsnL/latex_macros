@@ -1,0 +1,202 @@
+\ProvidesPackage{ssnlmacros}[2015/10/13 v1.0 My own macros]
+\RequirePackage{amsmath, amssymb, amsthm}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lmodern} % load a font with all the characters
+\RequirePackage{float}
+\restylefloat{table}
+\RequirePackage{textcomp, gensymb}
+\RequirePackage{centernot}
+\RequirePackage{algorithm}
+\RequirePackage{algpseudocode}
+\RequirePackage{tikz}
+\usetikzlibrary{arrows, chains, fit, shapes, decorations.pathreplacing, decorations.pathmorphing, positioning, calc}
+\RequirePackage{mathpazo}
+\RequirePackage{eulervm}
+\RequirePackage{mathtools}
+\RequirePackage{lipsum}
+\RequirePackage{courier}
+\RequirePackage{adjustbox}
+\RequirePackage{mathtools}
+\RequirePackage[overload]{empheq}
+\RequirePackage{array, etoolbox}
+\RequirePackage{xifthen}
+\RequirePackage{hyperref}
+\RequirePackage{undertilde}
+\RequirePackage{color, colortbl}
+\RequirePackage{mleftright, xparse}
+\RequirePackage{dsfont}
+\RequirePackage{enumitem}
+\RequirePackage{environ}
+
+\delimitershortfall-1sp
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\mathchardef\mhyphen="2D % Define a "math hyphen"
+\def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr\mathsurround=0pt$-$}}}
+\DeclareDocumentCommand{\prob}{O{}mO{}}{%
+    \mathbb{P}\ifthenelse{\isempty{#1}}{}{_{#1}}%
+    \left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]
+}
+\newcommand{\indic}[1]{\mathds{1}(#1)}
+\newcommand{\expect}[1]{\mathbb{E}(#1)}
+\newcommand{\var}[1]{\text{Var}(#1)}
+\newcommand{\cov}[2]{\text{Cov}(#1, #2)}
+\newcommand{\ci}{\perp\!\!\!\perp}
+\newcommand{\notci}{\not\!\perp\!\!\!\perp}
+\newcommand{\eqin}[1]{\overset{#1}{=}}
+\newcommand{\timeseries}[1]{\{#1_t\}}
+\newcommand{\given}{\mathrel{}\vert\mathrel{}}
+\newcommand{\normal}[2]{\mathcal{N}(#1, #2)}
+\newcommand{\pluseq}{\mathrel{+}=}
+\newcommand{\ato}{\text{ to }}
+\newcommand{\diag}[1]{\text{diag}(#1)}
+\newcommand{\sign}[1]{\text{sign}(#1)}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\boldvec}[1]{\mathbf{#1}}
+\newcommand{\overvec}[1]{\overrightarrow{#1}}
+\newcommand{\transpose}[1]{{#1}^{\mathbf{T}}}
+\newcommand{\binaryset}[1]{\{0, 1\}\ifthenelse{\equal{#1}{1}}{}{^{#1}}}
+\newcommand{\concat}{\mathbin{\|}}
+\newcommand{\alignnoop}{\hphantom{{} = 1}}
+\newcommand{\stext}[1]{\text{ #1 }}
+\newcommand{\slashcomment}[1]{\text{\hspace{0.5em} $/\mkern-3mu/$ #1}\hspace{-10em}}
+\newcommand{\st}{\stext{s.t.}}
+\newcommand{\ifcond}{\text{if }}
+\newcommand{\ow}{\text{otherwise}}
+\newcommand{\Let}[2]{\State #1 $\gets$ #2}
+\let\emptyset\varnothing
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\algrenewcommand\algorithmicrequire{\textbf{Precondition: }}
+\algrenewcommand\algorithmicensure{\textbf{Postcondition: }}
+\NewDocumentCommand\xDeclarePairedDelimiter{mmm}
+{%
+    \NewDocumentCommand#1{som}{%
+    \IfNoValueTF{##2}
+        {\IfBooleanTF{##1}{#2##3#3}{\mleft#2##3\mright#3}}
+        {\mathopen{##2#2}##3\mathclose{##2#3}}%
+    }%
+}
+\xDeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\xDeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\xDeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\xDeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\def\<#1>{\langle#1\rangle}
+\newcount\colveccount
+\newcommand*\colvec[1]{
+    \global\colveccount#1
+    \begin{pmatrix}
+    \colvecnext
+}
+\def\colvecnext#1{
+    #1
+    \global\advance\colveccount-1
+    \ifnum\colveccount>0
+            \\
+            \expandafter\colvecnext
+    \else
+            \end{pmatrix}
+    \fi
+}
+\newcommand{\algoriindent}{\hspace{2em}}
+\newcommand{\iindent}{
+    \ifnum\value{algorilevel}=1\relax
+        \stepcounter{algoriindenti}
+    \else
+        \ifnum\value{algorilevel}=2\relax
+            \stepcounter{algoriindentii}
+        \else
+        \fi
+    \fi
+}
+\newcommand{\ddedent}{
+    \ifnum\value{algorilevel}=1\relax
+        \addtocounter{algoriindenti}{-1}
+    \else
+        \ifnum\value{algorilevel}=2\relax
+            \addtocounter{algoriindentii}{-1}
+        \else
+        \fi
+    \fi
+}
+\newcounter{algorirownumi}
+\newcounter{algoriindenti}
+\newcounter{algorirownumii}
+\newcounter{algoriindentii}
+\newcounter{algorilevel}
+\newcommand{\rownumber}{
+    \ifnum\value{algorilevel}=1\relax
+        \ifnum\value{algoriindenti}=0\relax
+            \stepcounter{algorirownumi}\arabic{algorirownumi}.
+        \else
+        \fi
+    \else
+        \ifnum\value{algorilevel}=2\relax
+            \ifnum\value{algoriindentii}=0\relax
+                \stepcounter{algorirownumii}\arabic{algorirownumii}.
+            \else
+            \fi
+        \else
+        \fi
+    \fi
+}
+\newcommand{\rowindent}{
+    \ifnum\value{algorilevel}=1\relax
+        \hspace{\numexpr2*\value{algoriindenti}\relax em}
+    \else
+        \ifnum\value{algorilevel}=2\relax
+            \hspace{\numexpr2*\value{algoriindentii}\relax em}
+        \else
+        \fi
+    \fi
+}
+\NewEnviron{algori}{
+    \stepcounter{algorilevel}
+    \ifnum\value{algorilevel}=1\relax
+        \setcounter{algorirownumi}{0}
+        \setcounter{algoriindenti}{0}
+    \else
+        \ifnum\value{algorilevel}=2\relax
+            \setcounter{algorirownumii}{0}
+            \setcounter{algoriindentii}{0}
+        \else
+        \fi
+    \fi
+    \left[
+    \begin{tabular}{@{\makebox[1.2em][l]{\rownumber\space}} >{$}>{\rowindent}l<{$}}
+        \BODY
+    \end{tabular}
+    \right.
+    \addtocounter{algorilevel}{-1}
+}
+\NewEnviron{experi}{
+    \begin{tabular}{>{$}c<{$}}
+        \BODY
+    \end{tabular}
+}
+\newcommand{\tikzmark}[1]{
+    \tikz[overlay,remember picture] \node (#1) {};
+}
+\tikzset{square arrow/.style={to path={-- ++(0,.15) -| (\tikztotarget)}}}
+\tikzstyle{bayes_net}=[->, >=stealth', shorten >=1pt, auto, node distance=2cm, thick]
+\tikzstyle{markov_random_field}=[>=stealth', auto, node distance=2cm, thick]
+\tikzstyle{main_node}=[circle, rounded corners, draw, minimum size = 0.85cm]
+\tikzstyle{box_node}=[draw, minimum size = 0.7cm]
+\setlength{\parindent}{0cm}
+\setlength{\parskip}{5pt}
+\theoremstyle{plain}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{proposition}{Proposition}
+\newtheorem*{claim}{Claim}
+\theoremstyle{definition}
+\newtheorem*{definition}{Definition}
+\newtheorem*{assumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{observation}{Observation}
+\newtheorem*{notation}{Notation}
+\newtheorem*{fact}{Fact}
