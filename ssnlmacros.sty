@@ -26,8 +26,16 @@
 \RequirePackage{dsfont}
 \RequirePackage{enumitem}
 \RequirePackage{environ}
+\RequirePackage{xspace}
 
 \delimitershortfall-1sp
+\newcommand*{\eg}{e.g.\@\xspace}
+\newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\etc}{%
+    \@ifnextchar{.}%
+        {etc}%
+        {etc.\@\xspace}%
+}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \mathchardef\mhyphen="2D % Define a "math hyphen"
