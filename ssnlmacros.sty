@@ -31,6 +31,7 @@
 \delimitershortfall-1sp
 \newcommand*{\eg}{e.g.\@\xspace}
 \newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\st}{\ifmmode \stext{s.t.} \else s.t.\@\xspace \fi}
 \newcommand*{\etc}{%
     \@ifnextchar{.}%
         {etc}%
@@ -77,7 +78,6 @@
 \newcommand{\alignnoop}{\hphantom{{} = 1}}
 \newcommand{\stext}[1]{\text{ #1 }}
 \newcommand{\slashcomment}[1]{\text{\hspace{0.5em} $/\mkern-3mu/$ #1}\hspace{-10em}}
-\newcommand{\st}{\stext{s.t.}}
 \newcommand{\ifcond}{\text{if }}
 \newcommand{\ow}{\text{otherwise}}
 \newcommand{\Let}[2]{\State #1 $\gets$ #2}
