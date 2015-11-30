@@ -27,6 +27,8 @@
 \RequirePackage{enumitem}
 \RequirePackage{environ}
 \RequirePackage{xspace}
+\RequirePackage{listings}
+\RequirePackage{courier}
 
 \delimitershortfall-1sp
 \newcommand*{\eg}{e.g.\@\xspace}
@@ -197,9 +199,11 @@
 }
 \tikzset{square arrow/.style={to path={-- ++(0,.15) -| (\tikztotarget)}}}
 \tikzstyle{bayes_net}=[->, >=stealth', shorten >=1pt, auto, node distance=2cm, thick]
-\tikzstyle{markov_random_field}=[>=stealth', auto, node distance=2cm, thick]
+\tikzstyle{markov_random_field}=[>=stealth', auto, node distance = 2cm, thick]
 \tikzstyle{main_node}=[circle, rounded corners, draw, minimum size = 0.85cm]
 \tikzstyle{box_node}=[draw, minimum size = 0.7cm]
+\lstset{basicstyle = \normalsize\ttfamily, breaklines = true}
+\lstset{framextopmargin = 50pt,frame = bottomline}
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{5pt}
 \theoremstyle{plain}
