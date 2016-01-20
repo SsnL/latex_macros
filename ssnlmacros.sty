@@ -19,7 +19,6 @@
 \RequirePackage[overload]{empheq}
 \RequirePackage{array, etoolbox}
 \RequirePackage{xifthen}
-\RequirePackage{hyperref}
 \RequirePackage{undertilde}
 \RequirePackage{color, colortbl}
 \RequirePackage{mleftright, xparse}
@@ -29,6 +28,7 @@
 \RequirePackage{xspace}
 \RequirePackage{listings}
 \RequirePackage{courier}
+\RequirePackage{hyperref}
 
 \delimitershortfall-1sp
 \newcommand*{\eg}{e.g.\@\xspace}
@@ -59,6 +59,7 @@
     \left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]
 }
 \newcommand{\N}[0]{\mathbb{N}}
+\newcommand{\Z}[0]{\mathbb{Z}}
 \newcommand{\indic}[1]{\mathds{1}(#1)}
 \newcommand{\var}[1]{\text{Var}(#1)}
 \newcommand{\cov}[2]{\text{Cov}(#1, #2)}
@@ -213,6 +214,7 @@
 \newtheorem*{corollary}{Corollary}
 \newtheorem*{proposition}{Proposition}
 \newtheorem*{claim}{Claim}
+\newtheorem*{conjecture}{Conjecture}
 \theoremstyle{definition}
 \newtheorem*{definition}{Definition}
 \newtheorem*{assumption}{Assumption}
