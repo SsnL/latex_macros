@@ -48,17 +48,31 @@
         {r.e.}%
         {r.e.\@\xspace}%
 }
+\newcommand*{\almoste}{%
+    \@ifnextchar{.}%
+        {a.e.}%
+        {a.e.\@\xspace}%
+}
+\newcommand*{\almosts}{%
+    \@ifnextchar{.}%
+        {a.s.}%
+        {a.s.\@\xspace}%
+}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \mathchardef\mhyphen="2D % Define a "math hyphen"
 \def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr\mathsurround=0pt$-$}}}
 \DeclareDocumentCommand{\prob}{O{}mO{}}{%
     \mathbb{P}\ifthenelse{\isempty{#1}}{}{_{#1}}%
-    \left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]
+    \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
 }
 \DeclareDocumentCommand{\expect}{O{}mO{}}{%
     \mathbb{E}\ifthenelse{\isempty{#1}}{}{_{#1}}%
-    \left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]
+    \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
+}
+\DeclareDocumentCommand{\indic}{O{}mO{}}{%
+    \mathbb{1}\ifthenelse{\isempty{#1}}{}{_{#1}}%
+    \ifthenelse{\isempty{#2}}{}{\left({#2}\right)}
 }
 \newcommand{\N}[0]{\mathbb{N}}
 \newcommand{\Z}[0]{\mathbb{Z}}
@@ -67,8 +81,7 @@
 \newcommand{\C}[0]{\mathbb{C}}
 \newcommand{\F}[0]{\mathbb{F}}
 \newcommand{\diff}[0]{\mathop{}\!\mathrm{d}}
-\newcommand{\stcomp}[1]{{#1}^{\mathsf{c}}}
-\newcommand{\indic}[1]{\mathds{1}(#1)}
+\newcommand{\setcomp}[1]{{#1}^{\mathsf{c}}}
 \newcommand{\var}[1]{\text{Var}(#1)}
 \newcommand{\cov}[2]{\text{Cov}(#1, #2)}
 \newcommand{\ci}{\perp\!\!\!\perp}
@@ -82,6 +95,7 @@
 \newcommand{\ato}{\text{ to }}
 \newcommand{\rmod}[1]{\text{mod}\ #1}
 \newcommand{\real}[1]{\text{Re}(#1)}
+\newcommand{\grad}[0]{\nabla}
 \newcommand{\tr}[1]{\text{tr}(#1)}
 \newcommand{\diag}[1]{\text{diag}(#1)}
 \newcommand{\sign}[1]{\text{sign}(#1)}
@@ -89,6 +103,7 @@
 \newcommand{\boldvec}[1]{\mathbf{#1}}
 \newcommand{\overvec}[1]{\overrightarrow{#1}}
 \newcommand{\transpose}[1]{{#1}^{\mathbf{T}}}
+\newcommand{\T}[0]{^{\mathbf{T}}}
 \newcommand{\binaryset}[1]{\{0, 1\}\ifthenelse{\equal{#1}{1}}{}{^{#1}}}
 \newcommand{\concat}{\mathbin{\|}}
 \newcommand{\alignnoop}{\hphantom{{} = 1}}
