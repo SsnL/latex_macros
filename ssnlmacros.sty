@@ -1,4 +1,4 @@
-\ProvidesPackage{ssnlmacros}[2015/10/13 v1.0 My own macros]
+\ProvidesPackage{ssnlmacros}[2016/10/27 v1.3 My own macros]
 \RequirePackage{amsmath, amssymb, amsthm}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
@@ -11,6 +11,7 @@
 \RequirePackage{algpseudocode}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows, chains, fit, shapes, decorations.pathreplacing, decorations.pathmorphing, positioning, calc}
+\usepackage[framemethod=tikz]{mdframed}
 \RequirePackage{mathtools}
 \RequirePackage{lipsum}
 \RequirePackage{courier}
@@ -48,23 +49,16 @@
         {r.e.}%
         {r.e.\@\xspace}%
 }
-\newcommand*{\almoste}{%
-    \@ifnextchar{.}%
-        {a.e.}%
-        {a.e.\@\xspace}%
-}
-\newcommand*{\almosts}{%
-    \@ifnextchar{.}%
-        {a.s.}%
-        {a.s.\@\xspace}%
-}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \mathchardef\mhyphen="2D % Define a "math hyphen"
 \def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr\mathsurround=0pt$-$}}}
-\DeclareDocumentCommand{\prob}{O{}mO{}}{%
-    \mathbb{P}\ifthenelse{\isempty{#1}}{}{_{#1}}%
-    \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
+\DeclareDocumentCommand{\distn}{mO{}mO{}O{}}{%
+    {#1}\ifthenelse{\isempty{#2}}{}{_{#2}}%
+    \ifthenelse{\isempty{#3}}{}{\left[{#3}\ifthenelse{\isempty{#4}}{}{\mathrel{}\middle\vert\mathrel{}#4}\ifthenelse{\isempty{#5}}{}{; {#5}}\right]}
+}
+\DeclareDocumentCommand{\prob}{O{}mO{}O{}}{%
+    \distn{\mathbb{P}}[#1]{#2}[#3][#4]
 }
 \DeclareDocumentCommand{\expect}{O{}mO{}}{%
     \mathbb{E}\ifthenelse{\isempty{#1}}{}{_{#1}}%
@@ -82,10 +76,18 @@
 \newcommand{\F}[0]{\mathbb{F}}
 \newcommand{\diff}[0]{\mathop{}\!\mathrm{d}}
 \newcommand{\setcomp}[1]{{#1}^{\mathsf{c}}}
-\newcommand{\var}[1]{\text{Var}(#1)}
-\newcommand{\cov}[2]{\text{Cov}(#1, #2)}
+\newcommand{\var}[1]{\text{Var}\left({#1}\right)}
+\newcommand{\cov}[2]{\text{Cov}\left({#1, #2}\right)}
 \newcommand{\ci}{\perp\!\!\!\perp}
 \newcommand{\notci}{\not\!\perp\!\!\!\perp}
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distnas}[1]{%
+  \savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+  \savebox{\mysim}{\hbox{$\sim$}}%
+  \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+
+\newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
 \newcommand{\eqin}[1]{\overset{#1}{=}}
 \newcommand{\defeq}[0]{\overset{\mbox{\normalfont\tiny def}}{=}}
 \newcommand{\timeseries}[1]{\{#1_t\}}
@@ -146,6 +148,22 @@
             \expandafter\colvecnext
     \else
             \end{pmatrix}
+    \fi
+}
+\newcount\colvecbcount
+\newcommand*\colvecb[1]{
+    \global\colvecbcount#1
+    \begin{bmatrix}
+    \colvecbnext
+}
+\def\colvecbnext#1{
+    #1
+    \global\advance\colvecbcount-1
+    \ifnum\colvecbcount>0
+            \\
+            \expandafter\colvecbnext
+    \else
+            \end{bmatrix}
     \fi
 }
 \newcommand{\algoriindent}{\hspace{2em}}
@@ -237,6 +255,7 @@
 \setlength{\parindent}{0cm}
 \setlength{\parskip}{5pt}
 \theoremstyle{plain}
+\newmdenv[skipabove=\topsep, skipbelow=\topsep, tikzsetting={draw=lightgray, fill=lightgray, fill opacity=0.3}]{lightbg}
 \newtheorem*{theorem}{Theorem}
 \newtheorem*{lemma}{Lemma}
 \newtheorem*{corollary}{Corollary}
