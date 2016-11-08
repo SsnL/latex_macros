@@ -11,11 +11,11 @@
 \RequirePackage{algpseudocode}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows, chains, fit, shapes, decorations.pathreplacing, decorations.pathmorphing, positioning, calc}
-\usepackage[framemethod=tikz]{mdframed}
+\RequirePackage[framemethod=tikz]{mdframed}
 \RequirePackage{mathtools}
 \RequirePackage{lipsum}
 \RequirePackage{courier}
-\usepackage{systeme}
+\RequirePackage{systeme}
 \RequirePackage{adjustbox}
 \RequirePackage{mathtools}
 \RequirePackage[overload]{empheq}
@@ -88,6 +88,7 @@
 }
 
 \newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
+\newcommand{\ubar}[1]{\underbar{$#1$}}
 \newcommand{\eqin}[1]{\overset{#1}{=}}
 \newcommand{\defeq}[0]{\overset{\mbox{\normalfont\tiny def}}{=}}
 \newcommand{\timeseries}[1]{\{#1_t\}}
