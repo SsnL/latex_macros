@@ -11,6 +11,12 @@
 \RequirePackage{algpseudocode}
 \RequirePackage{tikz}
 \usetikzlibrary{arrows, chains, fit, shapes, decorations.pathreplacing, decorations.pathmorphing, positioning, calc}
+\usetikzlibrary{intersections}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+\usetikzlibrary{decorations.markings}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=newest}
 \RequirePackage[framemethod=tikz]{mdframed}
 \RequirePackage{mathtools}
 \RequirePackage{lipsum}
@@ -32,11 +38,18 @@
 \RequirePackage{courier}
 \RequirePackage{hyperref}
 \RequirePackage{braket}
+\RequirePackage{enumitem}
+\RequirePackage{pifont}
 
 \delimitershortfall-1sp
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand*{\iid}{i.i.d.\@\xspace}
 \newcommand*{\eg}{e.g.\@\xspace}
 \newcommand*{\ie}{i.e.\@\xspace}
+\newcommand*{\Eg}{E.g.\@\xspace}
+\newcommand*{\Ie}{I.e.\@\xspace}
+\newcommand*{\wrt}{\ifmmode \stext{w.r.t.} \else w.r.t.\@\xspace \fi}
+\newcommand*{\aever}{\ifmmode \stext{a.e.} \else a.e.\@\xspace \fi}
 \newcommand*{\st}{\ifmmode \stext{s.t.} \else s.t.\@\xspace \fi}
 \newcommand*{\wprob}{\ifmmode \stext{w.p.} \else w.p.\@\xspace \fi}
 \newcommand*{\ppt}{\ifmmode \stext{ppt} \else ppt \fi}
@@ -69,6 +82,9 @@
     \mathbb{1}\ifthenelse{\isempty{#1}}{}{_{#1}}%
     \ifthenelse{\isempty{#2}}{}{\left({#2}\right)}
 }
+% \mathcal{Y} as the decision region for hypothesis testing
+\newcommand{\Y}[0]{\mathcal{Y}}
+% \newcommand{\L}[0]{\mathcal{L}}
 \newcommand{\N}[0]{\mathbb{N}}
 \newcommand{\Z}[0]{\mathbb{Z}}
 \newcommand{\Q}[0]{\mathbb{Q}}
@@ -87,13 +103,17 @@
   \savebox{\mysim}{\hbox{$\sim$}}%
   \mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
 }
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
 
 \newcommand{\overbar}[1]{\mkern 1.5mu\overline{\mkern-1.5mu#1\mkern-1.5mu}\mkern 1.5mu}
 \newcommand{\ubar}[1]{\underline{\sbox\tw@{$#1$}\dp\tw@\z@\box\tw@}}
 \newcommand{\eqin}[1]{\overset{#1}{=}}
 \newcommand{\defeq}[0]{\overset{\mbox{\normalfont\tiny def}}{=}}
+\newcommand{\trieq}[0]{\triangleq}
 \newcommand{\timeseries}[1]{\{#1_t\}}
-\newcommand{\given}{\mathrel{}\vert\mathrel{}}
+\newcommand{\kl}[2]{D(#1 \mathrel{||} #2)}
+\newcommand{\given}{\mathrel{\vert}}
 \newcommand{\normal}[2]{\mathcal{N}(#1, #2)}
 \newcommand{\pluseq}{\mathrel{+}=}
 \newcommand{\ato}{\text{ to }}
@@ -108,6 +128,10 @@
 \newcommand{\overvec}[1]{\overrightarrow{#1}}
 \newcommand{\transpose}[1]{{#1}^{\mathbf{T}}}
 \newcommand{\T}[0]{^{\mathbf{T}}}
+\newcommand{\eps}[0]{\epsilon}
+\newcommand{\glt}{%
+  \mathrel{\ooalign{\raisebox{.6ex}{$>$}\cr\raisebox{-.6ex}{$<$}}}
+}
 \newcommand{\binaryset}[1]{\{0, 1\}\ifthenelse{\equal{#1}{1}}{}{^{#1}}}
 \newcommand{\concat}{\mathbin{\|}}
 \newcommand{\alignnoop}{\hphantom{{} = 1}}
@@ -245,6 +269,8 @@
         \BODY
     \end{tabular}
 }
+
+% tikz
 \newcommand{\tikzmark}[1]{
     \tikz[overlay,remember picture] \node (#1) {};
 }
@@ -253,6 +279,15 @@
 \tikzstyle{markov_random_field}=[>=stealth', auto, node distance = 2cm, thick]
 \tikzstyle{main_node}=[circle, rounded corners, draw, minimum size = 0.85cm]
 \tikzstyle{box_node}=[draw, minimum size = 0.7cm]
+\def\getxlength#1{
+  \path let \p{x}=(1,0), \n{xlen}={veclen(\x{x},\y{x})}
+  in \pgfextra{\xdef#1{\n{xlen}}};
+}
+\def\getylength#1{
+  \path let \p{x}=(0,1), \n{xlen}={veclen(\x{x},\y{x})}
+  in \pgfextra{\xdef#1{\n{xlen}}};
+}
+
 \lstset{basicstyle = \normalsize\ttfamily, breaklines = true}
 \lstset{framextopmargin = 50pt,frame = bottomline}
 \setlength{\parindent}{0cm}
