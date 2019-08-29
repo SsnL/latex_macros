@@ -22,8 +22,8 @@
 \RequirePackage{lipsum}
 \RequirePackage{courier}
 \RequirePackage{systeme}
+\RequirePackage{xstring}
 \RequirePackage{adjustbox}
-\RequirePackage{mathtools}
 \RequirePackage[overload]{empheq}
 \RequirePackage{array, etoolbox}
 \RequirePackage{xifthen}
@@ -40,16 +40,19 @@
 \RequirePackage{braket}
 \RequirePackage{enumitem}
 \RequirePackage{pifont}
+\RequirePackage{mdframed}
 
 \delimitershortfall-1sp
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 \newcommand*{\iid}{\ifmmode \stext{i.i.d.} \else i.i.d.\@\xspace \fi}
+\newcommand*{\iidsim}{\overset{\iid}{\sim}}
 \newcommand*{\eg}{e.g.\@\xspace}
 \newcommand*{\ie}{i.e.\@\xspace}
 \newcommand*{\Eg}{E.g.\@\xspace}
 \newcommand*{\Ie}{I.e.\@\xspace}
 \newcommand*{\wrt}{\ifmmode \stext{w.r.t.} \else w.r.t.\@\xspace \fi}
 \newcommand*{\aever}{\ifmmode \stext{a.e.} \else a.e.\@\xspace \fi}
+\newcommand*{\asurely}{\ifmmode \stext{a.s.} \else a.s.\@\xspace \fi}
 \newcommand*{\st}{\ifmmode \stext{s.t.} \else s.t.\@\xspace \fi}
 \newcommand*{\wprob}{\ifmmode \stext{w.p.} \else w.p.\@\xspace \fi}
 \newcommand*{\ppt}{\ifmmode \stext{ppt} \else ppt \fi}
@@ -65,6 +68,9 @@
 }
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand\wcdot{\,\cdot\,}
+\newcommand\wildcdot{\wcdot}
+\newcommand\evalat[1]{\bigg\rvert_{#1}}
 \mathchardef\mhyphen="2D % Define a "math hyphen"
 \def\dotminus{\mathbin{\ooalign{\hss\raise1ex\hbox{.}\hss\cr\mathsurround=0pt$-$}}}
 \DeclareDocumentCommand{\distn}{mO{}mO{}O{}}{%
@@ -78,8 +84,12 @@
     \mathbb{E}\ifthenelse{\isempty{#1}}{}{_{#1}}%
     \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
 }
+\DeclareDocumentCommand{\var}{O{}mO{}}{%
+    \text{Var}\ifthenelse{\isempty{#1}}{}{_{#1}}%
+    \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
+}
 \DeclareDocumentCommand{\indic}{O{}mO{}}{%
-    \mathbb{1}\ifthenelse{\isempty{#1}}{}{_{#1}}%
+    \mathds{1}\ifthenelse{\isempty{#1}}{}{_{#1}}%
     \ifthenelse{\isempty{#2}}{}{\left({#2}\right)}
 }
 % \mathcal{Y} as the decision region for hypothesis testing
@@ -93,7 +103,6 @@
 \newcommand{\F}[0]{\mathbb{F}}
 \newcommand{\diff}[0]{\mathop{}\!\mathrm{d}}
 \newcommand{\setcomp}[1]{{#1}^{\mathsf{c}}}
-\newcommand{\var}[1]{\text{Var}\left({#1}\right)}
 \newcommand{\cov}[2]{\text{Cov}\left({#1, #2}\right)}
 \newcommand{\ci}{\perp\!\!\!\perp}
 \newcommand{\notci}{\not\!\perp\!\!\!\perp}
@@ -111,20 +120,38 @@
 \newcommand{\eqin}[1]{\overset{#1}{=}}
 \newcommand{\defeq}[0]{\overset{\mbox{\normalfont\tiny def}}{=}}
 \newcommand{\trieq}[0]{\triangleq}
+\newcommand*{\dotleq}{\mathrel{\dot{\leq}}}
+\newcommand*{\dotgeq}{\mathrel{\dot{\geq}}}
+\newcommand*{\dotlt}{\mathrel{\dot{<}}}
+\newcommand*{\dotgt}{\mathrel{\dot{>}}}
 \newcommand{\timeseries}[1]{\{#1_t\}}
+\newcommand{\divergence}[3]{D_{#1}(#2 \mathrel{||} #3)}
 \newcommand{\kl}[2]{D(#1 \mathrel{||} #2)}
+\newcommand{\tv}[2]{d_{\mathsf{TV}}(#1, #2)}
+\newcommand{\jsd}[2]{\operatorname{JSD}(#1 \mathrel{||} #2)}
 \newcommand{\given}{\mathrel{\vert}}
 \newcommand{\normal}[2]{\mathcal{N}(#1, #2)}
 \newcommand{\pluseq}{\mathrel{+}=}
 \newcommand{\ato}{\text{ to }}
+\newcommand{\fixme}[1]{\textrm{\color{red} FIXME: #1}}
 \newcommand{\rmod}[1]{\text{mod}\ #1}
 \newcommand{\real}[1]{\text{Re}(#1)}
 \newcommand{\grad}[0]{\nabla}
 \newcommand{\tr}[1]{\text{tr}(#1)}
-\newcommand{\diag}[1]{\text{diag}(#1)}
-\newcommand{\sign}[1]{\text{sign}(#1)}
-\newcommand{\mat}[1]{\mathbf{#1}}
-\newcommand{\boldvec}[1]{\mathbf{#1}}
+\newcommand{\supp}[1]{\operatorname{supp}(#1)}
+\newcommand{\diag}[1]{\operatorname{diag}(#1)}
+\newcommand{\sign}[1]{\operatorname{sign}(#1)}
+
+\def\mydefb#1{\expandafter\def\csname bvecisletter@#1\endcsname{#1}}
+\def\mydefallb#1{\ifx#1\mydefallb\else\mydefb#1\expandafter\mydefallb\fi}
+\mydefallb ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\mydefallb
+\def\bvec#1{{%
+  \scancs{\result}{#1}% needed to get things \bvec{\mu} work with ifcsmacro
+  \expandafter\ifcsmacro{bvecisletter@\result}{\mathbf{#1}}{\boldsymbol{#1}}
+}}
+
+\newcommand{\mat}[1]{\bvec{#1}}
+\newcommand{\boldvec}[1]{\bvec{#1}}
 \newcommand{\overvec}[1]{\overrightarrow{#1}}
 \newcommand{\transpose}[1]{{#1}^{\mathbf{T}}}
 \newcommand{\T}[0]{^{\mathbf{T}}}
@@ -135,6 +162,9 @@
 \newcommand{\binaryset}[1]{\{0, 1\}\ifthenelse{\equal{#1}{1}}{}{^{#1}}}
 \newcommand{\concat}{\mathbin{\|}}
 \newcommand{\alignnoop}{\hphantom{{} = 1}}
+\newcommand{\alignpushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+\newcommand{\alignpushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+
 \newcommand{\stext}[1]{\text{ #1 }}
 \newcommand{\slashcomment}[1]{\text{\hspace{0.5em} $/\mkern-3mu/$ #1}\hspace{-10em}}
 \newcommand{\ifcond}{\text{if }}
@@ -295,8 +325,11 @@
 \theoremstyle{plain}
 \newmdenv[skipabove=\topsep, skipbelow=\topsep, tikzsetting={draw=lightgray, fill=lightgray, fill opacity=0.3}]{lightbg}
 \newtheorem*{theorem}{Theorem}
+\surroundwithmdframed[backgroundcolor=lightgray!30, innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt]{theorem}
 \newtheorem*{lemma}{Lemma}
+\surroundwithmdframed[backgroundcolor=lightgray!30, innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt]{lemma}
 \newtheorem*{corollary}{Corollary}
+\surroundwithmdframed[backgroundcolor=lightgray!30, innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt]{corollary}
 \newtheorem*{proposition}{Proposition}
 \newtheorem*{claim}{Claim}
 \newtheorem*{conjecture}{Conjecture}
@@ -305,9 +338,14 @@
 \newtheorem*{assumption}{Assumption}
 \theoremstyle{remark}
 \newtheorem*{remark}{Remark}
+\surroundwithmdframed[innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt, innertopmargin=8pt]{remark}
+\surroundwithmdframed[innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt, innertopmargin=8pt]{proof}
+\surroundwithmdframed[innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt, innertopmargin=8pt]{fact}
 \newtheorem*{motivation}{Motivation}
 \newtheorem*{example}{Example}
 \newtheorem*{problem}{Problem}
+\surroundwithmdframed[innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt, innertopmargin=8pt]{motivation}
+\surroundwithmdframed[innerleftmargin=8pt, innerrightmargin=8pt, rightmargin=-8pt, leftmargin=-8pt, innertopmargin=8pt]{example}
 \newtheorem*{question}{Question}
 \newtheorem*{observation}{Observation}
 \newtheorem*{notation}{Notation}
