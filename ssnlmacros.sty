@@ -68,6 +68,9 @@
 }
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\epi}{\textbf{epi}}
+\DeclareMathOperator*{\hyp}{\textbf{hyp}}
+\DeclareMathOperator*{\interior}{\textbf{int}}
 \newcommand\wcdot{\,\cdot\,}
 \newcommand\wildcdot{\wcdot}
 \newcommand\evalat[1]{\bigg\rvert_{#1}}
@@ -82,6 +85,10 @@
 }
 \DeclareDocumentCommand{\expect}{O{}mO{}}{%
     \mathbb{E}\ifthenelse{\isempty{#1}}{}{_{#1}}%
+    \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
+}
+\DeclareDocumentCommand{\expectunder}{O{}mO{}}{%
+    \ifthenelse{\isempty{#1}}{\mathbb{E}}{\underset{#1}{\mathbb{E}}}%
     \ifthenelse{\isempty{#2}}{}{\left[{#2}\ifthenelse{\isempty{#3}}{}{\mathrel{}\middle\vert\mathrel{}#3}\right]}
 }
 \DeclareDocumentCommand{\var}{O{}mO{}}{%
@@ -126,7 +133,8 @@
 \newcommand*{\dotgt}{\mathrel{\dot{>}}}
 \newcommand{\timeseries}[1]{\{#1_t\}}
 \newcommand{\divergence}[3]{D_{#1}(#2 \mathrel{||} #3)}
-\newcommand{\kl}[2]{D(#1 \mathrel{||} #2)}
+\newcommand{\kl}[2]{D_\mathsf{KL}(#1 \mathrel{||} #2)}
+\newcommand{\klshort}[2]{D(#1 \mathrel{||} #2)}
 \newcommand{\tv}[2]{d_{\mathsf{TV}}(#1, #2)}
 \newcommand{\jsd}[2]{\operatorname{JSD}(#1 \mathrel{||} #2)}
 \newcommand{\given}{\mathrel{\vert}}
